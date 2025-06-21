@@ -7,6 +7,8 @@ import { Droppable, Draggable } from "@hello-pangea/dnd";
 type ColumnProps = {
   column: ColumnType;
   onAddTask: (columnId: string, content: string) => void;
+  onUpdateTask: (columnId: string, taskId: string, newContent: string) => void;
+  onDeleteTask: (columnId: string, taskId: string) => void;
 };
 
 const ColumnContainer = styled.div`
@@ -44,7 +46,12 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-export const Column = ({ column, onAddTask }: ColumnProps) => {
+export const Column = ({
+  column,
+  onAddTask,
+  onUpdateTask,
+  onDeleteTask,
+}: ColumnProps) => {
   const [newTask, setNewTask] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,9 +61,26 @@ export const Column = ({ column, onAddTask }: ColumnProps) => {
     setNewTask("");
   };
 
+  const handleEditTask = (taskId: string, newContent: string) => {
+    onUpdateTask(column.id, taskId, newContent);
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    onDeleteTask(column.id, taskId);
+  };
+
   return (
     <ColumnContainer>
       <ColumnTitle>{column.title}</ColumnTitle>
+      <AddTaskForm onSubmit={handleSubmit}>
+        <Input
+          type="text"
+          placeholder="Nova tarefa"
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
+        />
+        <Button type="submit">+</Button>
+      </AddTaskForm>
       <Droppable droppableId={column.id}>
         {(provided) => (
           <div
@@ -72,7 +96,12 @@ export const Column = ({ column, onAddTask }: ColumnProps) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <Task task={task} />
+                    <Task
+                      key={task.id}
+                      task={task}
+                      onEdit={handleEditTask}
+                      onDelete={handleDeleteTask}
+                    />
                   </div>
                 )}
               </Draggable>
@@ -81,15 +110,6 @@ export const Column = ({ column, onAddTask }: ColumnProps) => {
           </div>
         )}
       </Droppable>
-      <AddTaskForm onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          placeholder="Nova tarefa"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-        />
-        <Button type="submit">+</Button>
-      </AddTaskForm>
     </ColumnContainer>
   );
 };
