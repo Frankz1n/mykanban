@@ -111,11 +111,42 @@ function App() {
     setColumns(newCols);
   };
 
+  const updateTask = (columnId: string, taskId: string, newContent: string) => {
+    setColumns((prev) =>
+      prev.map((col) =>
+        col.id === columnId
+          ? {
+              ...col,
+              tasks: col.tasks.map((t) =>
+                t.id === taskId ? { ...t, content: newContent } : t
+              ),
+            }
+          : col
+      )
+    );
+  };
+
+  const deleteTask = (columnId: string, taskId: string) => {
+    setColumns((prev) =>
+      prev.map((col) =>
+        col.id === columnId
+          ? { ...col, tasks: col.tasks.filter((t) => t.id !== taskId) }
+          : col
+      )
+    );
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <AppContainer>
         {columns.map((col) => (
-          <Column key={col.id} column={col} onAddTask={addTask} />
+          <Column
+            key={col.id}
+            column={col}
+            onAddTask={addTask}
+            onUpdateTask={updateTask}
+            onDeleteTask={deleteTask}
+          />
         ))}
       </AppContainer>
     </DragDropContext>
