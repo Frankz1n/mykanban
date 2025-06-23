@@ -7,14 +7,7 @@ export function useColumn(
   onUpdateTask: (columnId: string, taskId: string, newContent: string) => void,
   onDeleteTask: (columnId: string, taskId: string) => void
 ) {
-  const [newTask, setNewTask] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTask.trim()) return;
-    onAddTask(column.id, newTask.trim());
-    setNewTask("");
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleEditTask = (taskId: string, newContent: string) => {
     onUpdateTask(column.id, taskId, newContent);
@@ -24,11 +17,19 @@ export function useColumn(
     onDeleteTask(column.id, taskId);
   };
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleAddTask = (content: string) => {
+    onAddTask(column.id, content);
+  };
+
   return {
-    newTask,
-    setNewTask,
-    handleSubmit,
     handleEditTask,
     handleDeleteTask,
+    openModal,
+    closeModal,
+    handleAddTask,
+    isModalOpen,
   };
 }

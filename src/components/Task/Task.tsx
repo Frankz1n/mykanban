@@ -1,6 +1,12 @@
 import { useTask } from "../../hooks/useTask";
 import type { TaskType } from "../../types/kanban";
-import { Button, Content, Input, TaskContainer } from "./styles";
+import {
+  Content,
+  DeleteButton,
+  EditButton,
+  Input,
+  TaskContainer,
+} from "./styles";
 
 type TaskProps = {
   task: TaskType;
@@ -25,8 +31,8 @@ export const Task = ({ task, onEdit, onDelete }: TaskProps) => {
         <Content>{task.content}</Content>
       )}
 
-      <Button onClick={handleEdit}>{editing ? "💾" : "✏️"}</Button>
-      <Button onClick={() => onDelete(task.id)}>🗑️</Button>
+      <EditButton onClick={handleEdit}>{editing ? "💾" : "✏️"}</EditButton>
+      <DeleteButton onClick={() => onDelete(task.id)}>🗑️</DeleteButton>
     </TaskContainer>
   );
 };

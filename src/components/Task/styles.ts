@@ -2,10 +2,9 @@ import styled from "styled-components";
 
 export const TaskContainer = styled.div`
   background-color: #fff;
+  box-sizing: border-box;
   border-radius: 8px;
   padding: 12px;
-  margin-bottom: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,6 +12,7 @@ export const TaskContainer = styled.div`
 
 export const Content = styled.span`
   flex: 1;
+  color: #333;
   margin-right: 8px;
 `;
 
@@ -22,9 +22,30 @@ export const Input = styled.input`
   margin-right: 8px;
 `;
 
-export const Button = styled.button`
+export const EditButton = styled.button`
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
-  margin-left: 4px;
+
+  &:hover {
+    background-color: #0f7;
+  }
+`;
+
+export const DeleteButton = styled.button`
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f04;
+  }
 `;

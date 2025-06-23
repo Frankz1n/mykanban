@@ -1,14 +1,9 @@
 import { Task } from "../Task/Task";
 import type { ColumnType } from "../../types/kanban";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
-import {
-  AddTaskForm,
-  Button,
-  ColumnContainer,
-  ColumnTitle,
-  Input,
-} from "./styles";
+import { AddTaskForm, Button, ColumnContainer, ColumnTitle } from "./styles";
 import { useColumn } from "../../hooks/useColumn";
+import { TaskModal } from "../TaskModal/TaskModal";
 
 type ColumnProps = {
   column: ColumnType;
@@ -24,30 +19,31 @@ export const Column = ({
   onDeleteTask,
 }: ColumnProps) => {
   const {
-    newTask,
-    setNewTask,
-    handleSubmit,
     handleEditTask,
     handleDeleteTask,
+    openModal,
+    closeModal,
+    handleAddTask,
+    isModalOpen,
   } = useColumn(column, onAddTask, onUpdateTask, onDeleteTask);
   return (
     <ColumnContainer>
-      <ColumnTitle>{column.title}</ColumnTitle>
-      <AddTaskForm onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          placeholder="Nova tarefa"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-        />
-        <Button type="submit">+</Button>
+      <AddTaskForm>
+        <ColumnTitle>{column.title}</ColumnTitle>
+        <Button onClick={openModal}>+</Button>
       </AddTaskForm>
       <Droppable droppableId={column.id}>
         {(provided) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            style={{ flexGrow: 1, minHeight: "20px" }}
+            style={{
+              flexGrow: 1,
+              minHeight: "100%",
+              gap: "8px",
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
             {column.tasks.map((task, index) => (
               <Draggable key={task.id} draggableId={task.id} index={index}>
@@ -71,6 +67,11 @@ export const Column = ({
           </div>
         )}
       </Droppable>
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={handleAddTask}
+      />
     </ColumnContainer>
   );
 };
